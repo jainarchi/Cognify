@@ -2,9 +2,11 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import {connectDB} from './config/db.js'
-
+import authRouter from './routers/authRouters.js'
 
 dotenv.config();
+console.log("JWT_SECRET loaded:", !!process.env.JWT_SECRET);
+
 
 const app = express();
 const PORT = process.env.PORT || 4000;
@@ -13,6 +15,13 @@ const PORT = process.env.PORT || 4000;
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+
+connectDB();
+
+
+app.use('/api/auth' , authRouter);
+
 
 
 
@@ -24,12 +33,6 @@ app.get("/", (req, res) => {
 
 
 
-connectDB()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server running on http://localhost:${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error("Failed to connect to DB, server not started", err);
-  });
+app.listen(PORT, () => {
+  console.log(`Server running on http://localhost:${PORT}`);
+});
