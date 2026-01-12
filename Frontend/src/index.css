@@ -1,24 +1,52 @@
 @import "tailwindcss";
 
-
 @theme {
-  --color-primary: #4f46e5;   /* Indigo / Purple */
+  --color-primary: #4f46e5; /* Indigo / Purple */
   --color-secondary: #3b82f6; /* Blue */
-  --color-accent: #8b5cf6;   /* Soft purple */
-  --color-bg: #0f172a;       /* Dark blue background */
-  --color-text: #e5e7eb;     /* Light text */
+  --color-accent: #8b5cf6; /* Soft purple */
+  --color-bg: #0f172a; /* Dark blue background */
+  --color-text: #e5e7eb; /* Light text */
 }
 
-
-
 @layer components {
+
+  .icon{
+    font-size: 18px;
+    font-weight: 600;
+    color: white;
+  }
+
+
   .btn {
-    @apply px-3 py-1.5 font-semibold text-white text-[16px] rounded-md ;
+    @apply px-3 py-1.5 font-semibold text-white text-[16px] rounded-md flex items-center justify-center gap-2;
     background: linear-gradient(
       135deg,
       var(--color-primary),
       var(--color-secondary)
     );
+  }
+
+  @media (max-width: 768px) {
+    .btn-mobile {
+      background: transparent;
+      color: #444;
+      font-size: 16px;
+      font-weight: 500;
+      width: 100%;
+      padding-block: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 2px;
+    }
+    .btn-mobile:hover {
+      background: linear-gradient(
+        135deg,
+        var(--color-secondary),
+        var(--color-accent)
+      );
+      border-radius: 2px;
+    }
   }
 
   .btn:hover {

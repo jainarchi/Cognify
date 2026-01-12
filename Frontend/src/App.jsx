@@ -1,14 +1,32 @@
 import React from 'react'
-import Navbar from './components/Navbar'
+import {Route , Routes} from 'react-router-dom'
+import { AuthProvider } from "./context/AuthContext";
+
+import Home from './pages/Home'
+import Login from './pages/Auth/Login'
+import Register from './pages/Auth/Register'
+import Profile from './pages/Profile'
+import QuizPage from './pages/Quiz/ShowQuiz';
+
+
 
 const App = () => {
   return (
-    <div>
-      <Navbar/>
+    <>
+    <AuthProvider>
+      <Routes>
+        <Route path='/' element={<Home />} /> 
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
 
 
-      
-    </div>
+        <Route path="/quiz/:tech/:level" element={<QuizPage />} />
+        
+
+      </Routes>
+   </AuthProvider>
+    </>
   )
 }
 
