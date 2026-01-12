@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+
+@theme {
+  --color-primary: #4f46e5;   /* Indigo / Purple */
+  --color-secondary: #3b82f6; /* Blue */
+  --color-accent: #8b5cf6;   /* Soft purple */
+  --color-bg: #0f172a;       /* Dark blue background */
+  --color-text: #e5e7eb;     /* Light text */
+}
+
+
+
+@layer components {
+  .btn {
+    @apply px-3 py-1.5 font-semibold text-white text-[16px] rounded-md ;
+    background: linear-gradient(
+      135deg,
+      var(--color-primary),
+      var(--color-secondary)
+    );
+  }
+
+  .btn:hover {
+    background: linear-gradient(
+      135deg,
+      var(--color-secondary),
+      var(--color-accent)
+    );
+  }
+}
