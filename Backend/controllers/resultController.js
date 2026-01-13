@@ -8,6 +8,7 @@ export const createResult = async (req , res) => {
                 success: false,
                 message: 'Not authorized'
             })
+            
         }
 
 
@@ -60,36 +61,37 @@ export const createResult = async (req , res) => {
 
 
 // List the result
-export const listResult = async (req , res) =>{
-   try{
-   
-        if( ! req.user || !req.user.id){
-            return res.status(401).json({
-                success: false,
-                message: 'Not authorized'
-            })
-        }
-
-
-        const {technology} = req.body;
-
-        const query = {user: req.user.id };
-        if(technology && technology.toLowerCase() !== 'all'){
-            query.technology = technology;
-        }
-        const items = (await Result.find(query)).toSorted({createdAt: -1}).lean();
-        return res.json({
-            success: true,
-            result: items
-        })
-
-
-   }
-   catch(err){
-    console.error('ListResults Error: ' , err);
-    return res.status(500).json({
+export const listResult = async (req, res) => {
+  try {
+    if (!req.user || !req.user.id) {
+      return res.status(401).json({
         success: false,
-        message: 'Server Error'
-    })
-   }
-}
+        message: "Not authorized",
+      });
+    }
+
+
+    const { technology } = req.query;
+    const query = { user: req.user.id };
+
+    if (technology && technology.toLowerCase() !== "all") {
+      query.technology = technology;
+    }
+
+    const items = await Result.find(query)
+      .sort({ createdAt: -1 })
+      .lean();
+
+    return res.json({
+      success: true,
+      results: items,
+    });
+  }
+   catch (err) {
+    console.error("ListResults Error:", err);
+    return res.status(500).json({
+      success: false,
+      message: "Server Error",
+    });
+  }
+};

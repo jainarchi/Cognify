@@ -19,6 +19,12 @@ const NavbarRight = () => {
 
   return (
     <div className="flex flex-col items-center gap-4 md:flex-row">
+       <button
+            className="btn btn-mobile"
+            onClick={() => navigate('/')}
+          >
+            Home
+          </button>
       {!isLoggedIn ? (
         <>
           <button
