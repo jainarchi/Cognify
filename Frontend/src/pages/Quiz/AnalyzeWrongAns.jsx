@@ -1,0 +1,130 @@
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { BrainCircuit, ArrowLeft, Save, Loader2, Sparkles } from 'lucide-react';
+
+const API_BASE = "http://localhost:4000";
+
+const AnalyzeWrongAns = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const mistakes = location.state?.wrong || [];
+
+  const [aiSummary, setAiSummary] = useState("");
+  const [isGenerating, setIsGenerating] = useState(false);
+
+  // 1. AI Summary Fetch karne ka logic
+  useEffect(() => {
+    const fetchAISummary = async () => {
+      if (mistakes.length === 0) return;
+      
+      try {
+        setIsGenerating(true);
+        const res = await axios.post(`${API_BASE}/api/ai/analyze`, { mistakes });
+        setAiSummary(res.data.summary);
+      } catch (err) {
+        console.error("AI Generation Error:", err);
+        setAiSummary("Sorry, AI could not generate a summary at this time.");
+      } finally {
+        setIsGenerating(false);
+      }
+    };
+
+    // fetchAISummary();
+
+    console.log('fetch ai summary') 
+  }, []);
+
+  
+
+  // 2. AI Notes ko Save karne ka logic
+  const handleSaveToNotes = async () => {
+    try {
+      const auth = JSON.parse(localStorage.getItem("auth"));
+      await axios.post(`${API_BASE}/api/notes`, {
+        title: `AI Analysis: ${mistakes[0]?.tech || 'Quiz'}`,
+        content: aiSummary,
+        category: "AI Generated"
+      }, {
+        headers: { Authorization: `Bearer ${auth?.token}` }
+      });
+      alert("AI Summary saved to your Personal Notes!");
+    } catch (err) {
+      alert("Failed to save notes.");
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 pb-10 font-sans">
+      {/* HEADER */}
+      <div className="bg-white border-b sticky top-0 z-50 p-4">
+        <div className="max-w-4xl mx-auto flex justify-between items-center">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-gray-600 hover:text-purple-600 font-bold transition-all">
+            <ArrowLeft size={20} /> Back
+          </button>
+          <div className="flex items-center gap-2">
+            <Sparkles className="text-purple-600" size={24} />
+            <h1 className="text-xl font-black text-gray-800 tracking-tight text-center">AI SMART GUIDE</h1>
+          </div>
+          <button 
+            disabled={isGenerating || !aiSummary}
+            onClick={handleSaveToNotes}
+            className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-xl font-bold shadow-lg disabled:opacity-50 hover:bg-purple-700 active:scale-95 transition-all"
+          >
+            <Save size={18} /> Save
+          </button>
+        </div>
+      </div>
+
+      <div className="max-w-4xl mx-auto p-4 mt-6 grid md:grid-cols-2 gap-6">
+        
+        {/* LEFT SIDE: WRONG ANSWERS LIST */}
+        <div className="space-y-4">
+          <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-2">Review Mistakes</h2>
+          {mistakes.map((m, idx) => (
+            <div key={idx} className="bg-white p-5 rounded-3xl border border-red-100 shadow-sm relative overflow-hidden">
+              <div className="absolute top-0 left-0 w-1.5 h-full bg-red-400"></div>
+              <h3 className="font-bold text-gray-800 mb-3 text-sm">{m.question}</h3>
+              <div className="space-y-2">
+                <div className="text-xs p-2 bg-red-50 text-red-700 rounded-lg border border-red-100">
+                   <span className="font-black">Your Ans:</span> {m.userAns}
+                </div>
+                <div className="text-xs p-2 bg-green-50 text-green-700 rounded-lg border border-green-100">
+                   <span className="font-black">Correct Ans:</span> {m.correctAns}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* RIGHT SIDE: AI SUMMARY */}
+        <div className="relative">
+          <div className="sticky top-24">
+            <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-2">AI Concept Summary</h2>
+            <div className="bg-white p-6 rounded-[2rem] border-2 border-purple-100 shadow-xl min-h-[400px]">
+              {isGenerating ? (
+                <div className="h-full flex flex-col items-center justify-center text-center py-20">
+                  <Loader2 className="animate-spin text-purple-600 mb-4" size={40} />
+                  <p className="text-gray-500 font-medium animate-pulse">Gemini is analyzing your weak points...</p>
+                </div>
+              ) : (
+                <div className="prose prose-purple">
+                  <div className="flex items-center gap-2 text-purple-700 mb-4">
+                    <BrainCircuit size={22} />
+                    <span className="font-black text-sm uppercase tracking-tighter">AI Learning Insights</span>
+                  </div>
+                  <div className="text-gray-700 leading-relaxed whitespace-pre-wrap text-sm">
+                    {aiSummary}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  );
+};
+
+export default AnalyzeWrongAns;

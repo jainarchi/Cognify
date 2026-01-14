@@ -1,152 +1,297 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
-import questionsData from "../../assets/dummyData";
 import axios from "axios";
-import { CheckCircle, XCircle, Target } from "lucide-react";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import {
+  CheckCircle,
+  XCircle,
+  Target,
+  Loader2,
+  ArrowRight,
+  Clock,
+} from "lucide-react";
+import ShowResult from "./ShowResult";
 
 const API_BASE = "http://localhost:4000";
 
 const ShowQuiz = () => {
-  const navigate = useNavigate();
   const { tech, level } = useParams();
 
+  const [questions, setQuestions] = useState([]);
+  const [loading, setLoading] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [userAnswers, setUserAnswers] = useState({});
   const [showResults, setShowResults] = useState(false);
+  const [isAnswered, setIsAnswered] = useState(false);
+  const [selectedIdx, setSelectedIdx] = useState(null);
 
+  const getTimerValue = () => {
+    if (level === "basic") return 6;
+    if (level === "intermediate") return 10;
+    if (level === "advanced") return 10;
+    return 6;
+  };
+
+  const initialTime = getTimerValue();
+  const [timeLeft, setTimeLeft] = useState(initialTime);
+  const timerRef = useRef(null);
   const submittedRef = useRef(false);
 
-  const questions = questionsData?.[tech]?.[level] || [];
-  const currentQ = questions[currentQuestion];
+  useEffect(() => {
+    const handleViolation = () => {
+      if (!showResults && !loading && questions.length > 0) {
+        toast.error("⚠️ Security Violation: Tab switch or Minimize detected!", {
+          toastId: "violation-toast",
+          position: "top-center",
+          autoClose: 2000,
+        });
 
-  const handleAnswerSelect = (index) => {
-    setUserAnswers((prev) => ({ ...prev, [currentQuestion]: index }));
-
-    setTimeout(() => {
-      if (currentQuestion < questions.length - 1) {
-        setCurrentQuestion((prev) => prev + 1);
-      } else {
-        setShowResults(true);
+        setTimeout(() => {
+          7;
+          setShowResults(true);
+        }, 3500);
       }
-    }, 400);
-  };
-
-  const correct = questions.filter(
-    (q, i) => userAnswers[i] === q.correctAnswer
-  ).length;
-
-  const wrong = questions.length - correct;
-  const score = questions.length
-    ? Math.round((correct / questions.length) * 100)
-    : 0;
-
-
-
-  const submitResult = async () => {
-    if (submittedRef.current) return;
-    if (!questions.length) return;
-
-    const auth = JSON.parse(localStorage.getItem("auth"));
-    const token = auth?.token ;
-    if (!token) return;
-
-    const payload = {
-      title: `${tech.toUpperCase()} - ${level} Quiz`,
-      technology: tech,
-      level,
-      totalQuestions: questions.length,
-      correct,
-      wrong,
     };
 
-    try {
-      submittedRef.current = true;
+    const handleVisibility = () => {
+      if (document.hidden) handleViolation();
+    };
 
-      await axios.post(`${API_BASE}/api/results`, payload, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+    const handleBlur = () => {
+      handleViolation();
+    };
 
-    } catch (err) {
-      submittedRef.current = false;
-      console.error("Error saving result:", err.response?.data || err.message);
+    document.addEventListener("visibilitychange", handleVisibility);
+    window.addEventListener("blur", handleBlur);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      window.removeEventListener("blur", handleBlur);
+    };
+  }, [showResults, loading, questions.length]);
+
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        setLoading(true);
+        const res = await axios.get(`${API_BASE}/api/questions`, {
+          params: { technology: tech, level, limit: 10 },
+        });
+        if (res.data.success) {
+          setQuestions(res.data.questions);
+          setTimeLeft(getTimerValue());
+        }
+      } catch (err) {
+        console.error("Fetch error", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchQuestions();
+  }, [tech, level]);
+
+  useEffect(() => {
+    if (!isAnswered && !showResults && !loading && questions.length > 0) {
+      timerRef.current = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            handleTimeOut();
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(timerRef.current);
+  }, [currentQuestion, isAnswered, loading, showResults]);
+
+  const handleTimeOut = () => {
+    clearInterval(timerRef.current);
+    setUserAnswers((prev) => ({ ...prev, [currentQuestion]: -1 }));
+    setIsAnswered(true);
+    setTimeout(() => handleNextQuestion(), 1500);
+  };
+
+  const handleAnswerSelect = (index) => {
+    if (isAnswered) return;
+    clearInterval(timerRef.current);
+    setSelectedIdx(index);
+    setIsAnswered(true);
+    setUserAnswers((prev) => ({ ...prev, [currentQuestion]: index }));
+  };
+
+  const handleNextQuestion = () => {
+    if (currentQuestion < questions.length - 1) {
+      setCurrentQuestion((prev) => prev + 1);
+      setIsAnswered(false);
+      setSelectedIdx(null);
+      setTimeLeft(getTimerValue());
+    } else {
+      setShowResults(true);
     }
   };
+
+  const correctCount = questions.filter(
+    (q, i) => userAnswers[i] === q.correctAnswer
+  ).length;
+  const wrongCount = questions.length - correctCount;
+  const score = questions.length
+    ? Math.round((correctCount / questions.length) * 100)
+    : 0;
 
   useEffect(() => {
     if (showResults) {
-      submitResult();
+      const submit = async () => {
+        if (submittedRef.current || !questions.length) return;
+        const auth = JSON.parse(localStorage.getItem("auth"));
+        try {
+          submittedRef.current = true;
+          await axios.post(
+            `${API_BASE}/api/results`,
+            {
+              title: `${tech.toUpperCase()} - ${level} Quiz`,
+              technology: tech,
+              level,
+              totalQuestions: questions.length,
+              correct: correctCount,
+              wrong: wrongCount,
+            },
+            {
+              headers: { Authorization: `Bearer ${auth?.token}` },
+            }
+          );
+        } catch (err) {
+          console.log(err);
+          submittedRef.current = false;
+        }
+      };
+      submit();
     }
   }, [showResults]);
 
-
-
-
-
-  if (showResults) {
+  if (loading)
     return (
-      <div className="h-screen w-full flex justify-center items-center">
-        <div className="w-full md:w-[500px] mx-auto p-6 py-20 flex flex-col items-center bg-purple-50 rounded-lg shadow">
-          <Target className="text-purple-600 mb-3" size={40} />
-
-          <h2 className="text-2xl font-bold mb-4">Quiz Completed 🎉</h2>
-
-          <div className="space-y-2">
-            <p className="text-lg text-green-600 flex items-center gap-2">
-              <CheckCircle /> Correct: {correct}
-            </p>
-
-            <p className="text-lg text-red-600 flex items-center gap-2">
-              <XCircle /> Wrong: {wrong}
-            </p>
-          </div>
-
-          <p className="text-xl font-semibold mt-4">
-            Score: {score}%
-          </p>
-
-
-          <div className="flex gap-4 mt-6">
-             <h3 onClick={() => {navigate('/')}} className="text-lg text-purple-600">Quizes</h3>
-             <h3 onClick={() => {navigate('/profile')}} className="text-lg text-purple-600" >Profile</h3>
-          </div>
-        </div>
+      <div className="h-screen w-full flex flex-col justify-center items-center">
+        <Loader2 className="animate-spin text-purple-600 mb-2" size={40} />
+        <p>Loading quiz...</p>
       </div>
     );
-  }
 
+  if (showResults)
+    return (
+      <ShowResult
+        wrongCount={wrongCount}
+        correctCount={correctCount}
+        score={score}
+        questions={questions}
+        userAnswers={userAnswers}
+        tech={tech}
+      />
+    );
 
+  const currentQ = questions[currentQuestion];
 
-  
   return (
-    <div className="h-screen w-full flex justify-center items-center">
-      <div className="md:w-[500px] p-6 bg-purple-50 rounded-lg shadow">
-        <h2 className="text-xl font-bold mb-2 capitalize text-purple-700">
-          {tech} – {level} level
-        </h2>
+    <div className="h-screen w-full flex justify-center bg-gray-50 p-4">
+      <ToastContainer limit={1} />
 
-        <p className="mb-4 text-sm text-gray-600">
-          Question {currentQuestion + 1} of {questions.length}
-        </p>
+      <div
+        className="w-full md:w-[600px] p-8 bg-white rounded-2xl shadow-xl border border-purple-100 relative overflow-auto 
+  .no-scrollbar"
+      >
+        {/* show time */}
+        <div
+          className="absolute top-0 left-0 h-1 transition-all duration-1000 linear"
+          style={{
+            width: `${(timeLeft / getTimerValue()) * 100}%`,
+            backgroundColor: timeLeft <= 3 ? "#ef4444" : "#9333ea",
+          }}
+        ></div>
 
-        <h3 className="text-lg font-semibold mb-4">
+        <div className="text-center mb-6">
+          <h1 className="text-2xl font-black text-gray-800 uppercase tracking-tight">
+            {tech} <span className="text-purple-600"> {level} </span>
+          </h1>
+          <p className="text-xs text-gray-400 font-bold mt-1">
+            Challenge Mode Active
+          </p>
+        </div>
+
+        <div className="flex justify-between items-center mb-6">
+          <div className="flex items-center gap-2 font-bold">
+            <Clock
+              size={18}
+              className={
+                timeLeft <= 3 ? "text-red-500 animate-pulse" : "text-purple-600"
+              }
+            />
+            <span
+              className={timeLeft <= 3 ? "text-red-500" : "text-purple-600"}
+            >
+              {timeLeft}s
+            </span>
+          </div>
+          <span className="text-xs font-bold text-gray-400">
+            Question {currentQuestion + 1} / {questions.length}
+          </span>
+        </div>
+
+        <h3 className="text-xl font-bold text-gray-800 mb-8 leading-relaxed">
           {currentQ?.question}
         </h3>
 
-        <div className="space-y-3">
-          {currentQ?.options.map((opt, i) => (
-            <button
-              key={i}
-              onClick={() => handleAnswerSelect(i)}
-              className="w-full text-left px-4 py-2 border rounded
-                hover:bg-purple-100 active:bg-purple-200 transition"
-            >
-              {opt}
-            </button>
-          ))}
+        <div className="grid grid-cols-1 gap-4">
+          {currentQ?.options.map((opt, i) => {
+            const isCorrect = i === currentQ.correctAnswer;
+            const isSelected = i === selectedIdx;
+            let btnStyle = "border-gray-100";
+
+            if (isAnswered) {
+              if (isCorrect)
+                btnStyle = "border-green-500 bg-green-50 text-green-700";
+              else if (isSelected)
+                btnStyle = "border-red-500 bg-red-50 text-red-700";
+              else btnStyle = "opacity-40";
+            } else {
+              btnStyle = "hover:border-purple-400 hover:bg-purple-50";
+            }
+
+            return (
+              <button
+                key={i}
+                disabled={isAnswered}
+                onClick={() => handleAnswerSelect(i)}
+                className={`w-full text-left px-6 py-4 border-2 rounded-xl font-medium transition-all ${btnStyle} flex justify-between items-center`}
+              >
+                {opt}
+                {isAnswered && isCorrect && (
+                  <CheckCircle size={20} className="text-green-600" />
+                )}
+                {isAnswered && isSelected && !isCorrect && (
+                  <XCircle size={20} className="text-red-600" />
+                )}
+              </button>
+            );
+          })}
         </div>
+
+        {isAnswered && (
+          <div className="mt-8">
+            <div className="p-4 bg-purple-50 rounded-xl border border-purple-100 mb-4 text-sm text-gray-700">
+              <span className="font-bold text-purple-700 block mb-1">
+                Explanation:
+              </span>
+              {currentQ?.explanation}
+            </div>
+            <button onClick={handleNextQuestion} className="btn w-full">
+              {currentQuestion === questions.length - 1
+                ? "See Results"
+                : "Next Question"}
+              <ArrowRight size={18} />
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
