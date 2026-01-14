@@ -18,7 +18,7 @@
 
 
   .btn {
-    @apply px-3 py-1.5 font-semibold text-white text-[16px] rounded-md flex items-center justify-center gap-2;
+    @apply px-3 py-1.5 font-semibold text-white text-[16px] rounded-md flex items-center justify-center gap-2 cursor-pointer;
     background: linear-gradient(
       135deg,
       var(--color-primary),
@@ -38,6 +38,7 @@
       justify-content: center;
       align-items: center;
       gap: 2px;
+      cursor: pointer;
     }
     .btn-mobile:hover {
       background: linear-gradient(
@@ -55,5 +56,18 @@
       var(--color-secondary),
       var(--color-accent)
     );
+  }
+}
+
+@layer utilities {
+ /*for Chrome, Safari and Opera */
+   .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* for IE, Edge and Firefox */
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
   }
 }

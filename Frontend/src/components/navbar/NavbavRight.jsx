@@ -18,13 +18,21 @@ const NavbarRight = () => {
 
 
   return (
-    <div className="flex flex-col items-center gap-4 md:flex-row">
+    <div className="flex flex-col items-center gap-4 md:flex-row relative z-99">
        <button
-            className="btn btn-mobile"
+            className="btn btn-mobile "
             onClick={() => navigate('/')}
           >
             Home
           </button>
+          <button
+            className="btn btn-mobile "
+            onClick={() => navigate('/notes')}
+          >
+            Notes
+          </button>
+          
+
       {!isLoggedIn ? (
         <>
           <button
@@ -44,7 +52,7 @@ const NavbarRight = () => {
         <>
           <div>
             <button
-              className="btn-mobile md:hidden"
+              className="btn btn-mobile md:hidden"
               onClick={() => navigate('/profile')}
             >
               Profile
@@ -61,7 +69,7 @@ const NavbarRight = () => {
           </div>
 
           <button
-            className="btn btn-mobile flex gap-2"
+            className="btn btn-mobile flex gap-1"
             onClick={handleLogout}
           >
             Logout <LogOut className="h-4" />
