@@ -7,6 +7,8 @@ import Login from './pages/Auth/Login'
 import Register from './pages/Auth/Register'
 import Profile from './pages/Profile'
 import QuizPage from './pages/Quiz/ShowQuiz';
+import AnalyzeWrongAns from './pages/Quiz/AnalyzeWrongAns';
+import Notes from './pages/Notes'
 
 
 
@@ -19,7 +21,8 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/profile" element={<Profile />} />
-
+        <Route path='/analyze-wrong-ans' element={<AnalyzeWrongAns />}/>
+        <Route path='/notes' element={<Notes />}/>
 
         <Route path="/quiz/:tech/:level" element={<QuizPage />} />
         

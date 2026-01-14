@@ -9,6 +9,9 @@
 }
 
 @layer components {
+  .nav-bg{
+    @apply bg-gradient-to-r from-indigo-400 via-purple-300 to-blue-300
+  }
 
   .icon{
     font-size: 18px;

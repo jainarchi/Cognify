@@ -5,6 +5,7 @@ import {connectDB} from './config/db.js'
 import authRouter from './routers/authRouters.js'
 import resultRouter from "./routers/resultRoutes.js";
 import questionRouter from './routers/questionRouters.js'
+import noteRouter from './routers/noteRouter.js'
 
 dotenv.config();
 console.log("JWT_SECRET loaded:", !!process.env.JWT_SECRET);
@@ -34,6 +35,7 @@ connectDB();
 app.use('/api/auth' , authRouter);
 app.use('/api/results' , resultRouter)
 app.use('/api/questions', questionRouter);
+app.use('/api/notes', noteRouter)
 
 
 

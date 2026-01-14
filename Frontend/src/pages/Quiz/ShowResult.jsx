@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom'
-import { CheckCircle, XCircle, Target } from "lucide-react";
+import { CheckCircle, XCircle, Target , Sparkle } from "lucide-react";
 
 const ShowResult = ({ correctCount, score, wrongCount , questions , userAnswers , tech  }) => {
     const navigate = useNavigate();
@@ -61,7 +61,7 @@ const ShowResult = ({ correctCount, score, wrongCount , questions , userAnswers 
                             onClick={handleReviewClick}
                             className="w-full btn"
                         >
-                            Analyze Mistakes with AI 
+                            Analyze Wrong Ans with AI<Sparkle className='h-4' />
                         </button>
                         <button
                             onClick={() => navigate("/")}

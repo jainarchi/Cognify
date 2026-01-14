@@ -9,7 +9,7 @@ const Navbar = () => {
 
   return (
     <nav className="w-full px-4 py-2 flex items-center justify-between md:px-20
-                    bg-gradient-to-r from-indigo-400 via-purple-300 to-blue-300
+                    nav-bg
                     shadow-xl h-[8vh] md:h-[10vh] ">
       
       
