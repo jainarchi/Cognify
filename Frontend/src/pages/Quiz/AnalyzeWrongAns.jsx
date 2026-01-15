@@ -1,7 +1,7 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { BrainCircuit, ArrowLeft, Save, Loader2, Sparkles } from 'lucide-react';
+import { BrainCircuit, ChevronLeft, Save, Loader2, Sparkles } from 'lucide-react';
 
 const API_BASE = "http://localhost:4000";
 
@@ -21,12 +21,12 @@ const AnalyzeWrongAns = () => {
 
        const auth = JSON.parse(localStorage.getItem('auth')); 
        const token = auth?.token ;
-       console.log(token);
+       console.log( 'token' , !!token);
       
       try {
         setIsGenerating(true);
         const res = await axios.post(
-          `${API_BASE}/api/ai/analyze/wrong-ans`, 
+          `${API_BASE}/api/ai/analyze/wrongans`, 
           { wrongAnsArr },
           {
             headers: {
@@ -35,7 +35,7 @@ const AnalyzeWrongAns = () => {
           }
         );
 
-        console.log('agyaaa data')
+        console.log('summary generated')
         setAiSummary(res.data.summary);
 
       } catch (err) {
@@ -69,32 +69,31 @@ const AnalyzeWrongAns = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-10 font-sans">
-      {/* HEADER */}
-      <div className="bg-white border-b sticky top-0 z-50 p-4">
-        <div className="max-w-4xl mx-auto flex justify-between items-center">
-          <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-gray-600 hover:text-purple-600 font-bold transition-all">
-            <ArrowLeft size={20} /> Back
+   
+     <>
+
+        <div className="max-w-4xl mx-auto flex justify-between items-center gap-6 p-2 bg-white border-b sticky top-0 z-50">
+          <button onClick={() => navigate(-1)} className="flex items-center gap-0.5 text-gray-500 hover:text-purple-600 font-bold transition-all">
+            <ChevronLeft size={16} /> Back
           </button>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1">
             <Sparkles className="text-purple-600" size={24} />
             <h1 className="text-xl font-black text-gray-800 tracking-tight text-center">AI SMART GUIDE</h1>
           </div>
           <button 
             disabled={isGenerating || !aiSummary}
             onClick={handleSaveToNotes}
-            className="flex items-center gap-2 bg-purple-600 text-white px-4 py-2 rounded-xl font-bold shadow-lg disabled:opacity-50 hover:bg-purple-700 active:scale-95 transition-all"
+            className="btn active:scale-95 transition-all"
           >
             <Save size={18} /> Save
           </button>
         </div>
-      </div>
-
-      <div className="max-w-4xl mx-auto p-4 mt-6 grid md:grid-cols-2 gap-6">
+     
+ <div className="min-h-screen bg-gray-50 pb-10 font-sans">
+      <div className="max-w-4xl mx-auto p-4 mt-2 grid md:grid-cols-2 gap-6">
         
-        {/* LEFT SIDE: WRONG ANSWERS LIST */}
         <div className="space-y-4">
-          <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-2">Review wrongAnsArr</h2>
+          <h2 className="text-sm font-semibold text-gray-400 uppercase mb-2">Review wrong Answers</h2>
           {wrongAnsArr.map((m, idx) => (
             <div key={idx} className="bg-white p-5 rounded-3xl border border-red-100 shadow-sm relative overflow-hidden">
               <div className="absolute top-0 left-0 w-1.5 h-full bg-red-400"></div>
@@ -111,7 +110,7 @@ const AnalyzeWrongAns = () => {
           ))}
         </div>
 
-        {/* RIGHT SIDE: AI SUMMARY */}
+       
         <div className="relative">
           <div className="sticky top-24">
             <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-2">AI Concept Summary</h2>
@@ -138,6 +137,8 @@ const AnalyzeWrongAns = () => {
 
       </div>
     </div>
+
+    </>
   );
 };
 

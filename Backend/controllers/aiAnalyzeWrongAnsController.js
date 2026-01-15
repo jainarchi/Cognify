@@ -1,46 +1,65 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
-
 export const aiAnalyzeWrongAnswers = async (req, res) => {
   try {
     const { wrongAnsArr } = req.body;
 
     if (!wrongAnsArr || wrongAnsArr.length === 0) {
-      return res.status(400).json({ message: "No wrong answers" });
+      return res.status(400).json({ success: false, message: "No data provided" });
     }
 
-    const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-    console.log(genAI);
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (!apiKey) {
+      return res.status(500).json({ message: "API Key missing in .env" });
+    }
+
     const tech = wrongAnsArr[0]?.tech || "General Technology";
+    console.log("Processing AI request for tech:", tech);
 
-    const prompt = `
-      You are an expert ${tech} tutor. A student has failed some questions in a quiz.
-      
-      STUDENT MISTAKES DATA (JSON):
-      ${JSON.stringify(wrongAnsArr, null, 2)} 
+    console.log("Gemini key loaded:", !!process.env.GEMINI_API_KEY);
 
-      INSTRUCTIONS:
-      1. For each question in the data, provide a very brief explanation of why the user's answer was incorrect.
-      2. Provide a two-sentence 'Pro-Tip' to master the correct concept.
-      3. Use a professional, encouraging, and mentor-like tone.
-      4. Format the output using clear bullet points and bold headings for each question.
-    `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+ const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`;
 
-    res.status(200).json({ 
-      success: true, 
-      summary: text
+   
+    const promptText = `You are a helpful ${tech} tutor. Analyze these quiz mistakes and give a concise summary: ${JSON.stringify(wrongAnsArr)}`;
+
+  
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{ text: promptText }]
+        }]
+      })
+    });
+
+    const data = await response.json()
+
+
+    if (data.error) {
+      console.error("Google API Error:", data.error.message);
+      return res.status(data.error.code || 500).json({ 
+        success: false, 
+        message: data.error.message 
+      });
+    }
+
+
+    const aiSummary = data.candidates[0].content.parts[0].text;
+    
+    res.status(200).json({
+      success: true,
+      summary: aiSummary
     });
 
   } catch (error) {
-    console.error("DETAILED BACKEND ERROR:", error);
-    res.status(500).json({ 
-      success: false, 
-      message: "AI Service Error", 
-      error: error.message 
+    console.error("DETAILED BACKEND ERROR:", error.message);
+    res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message
     });
   }
 };

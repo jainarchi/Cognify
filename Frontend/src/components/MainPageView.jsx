@@ -10,27 +10,27 @@ const MainPageView = () => {
       <div className="bg-gradient-to-br from-purple-50 to-white border border-purple-100 rounded-2xl p-6 py-16 md:py-20 md:p-10 shadow-md text-center">
 
         <div className="flex justify-center mb-6">
-          <div className="w-20 h-20 rounded-2xl bg-purple-100 flex items-center justify-center rotate-3 shadow-inner ">
-            <Award size={40} className="text-purple-700 -rotate-3" />
-          </div>
+           <div className="w-20 h-20 bg-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-inner ">
+              <Award size={40} className="text-purple-600 " />
+            </div>
         </div>
 
-        {/* TITLE */}
+
         <h2 className="text-3xl md:text-4xl font-extrabold text-gray-800 mb-4 tracking-tight">
           Welcome to <span className="text-purple-700">Tech Quiz Master</span>
         </h2>
 
-        {/* DESCRIPTION */}
         <p className="text-gray-600 max-w-2xl mx-auto mb-10 text-lg leading-relaxed">
           Test your skills, track your progress, and master modern technologies.
           Choose a technology and challenge yourself with different difficulty
           levels.
         </p>
 
-        {/* FEATURES (Original Layout with New Styling) */}
+       
+
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-3xl mx-auto">
 
-          {/* FEATURE 1 */}
           <div className="flex items-start gap-4 bg-white/80 backdrop-blur-sm p-5 rounded-2xl border border-purple-100 shadow-sm hover:translate-y-[-2px] transition-transform">
             <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center shrink-0">
               <Star size={20} className="text-purple-700" />
@@ -45,7 +45,7 @@ const MainPageView = () => {
             </div>
           </div>
 
-          {/* FEATURE 2 */}
+        
           <div className="flex items-start gap-4 bg-white/80 backdrop-blur-sm p-5 rounded-2xl border border-purple-100 shadow-sm hover:translate-y-[-2px] transition-transform">
             <div className="w-12 h-12 rounded-full bg-purple-100 flex items-center justify-center shrink-0">
               <Zap size={20} className="text-purple-700" />
