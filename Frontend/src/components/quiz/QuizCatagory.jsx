@@ -34,13 +34,13 @@ const QuizCategory = () => {
         </div>
 
        
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-y-10">
           {technologies.map((tech) => (
             <div 
               key={tech.id} 
-              className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow"
+              className="card-style"
             >
-              {/* Tech Header */}
+          
               <div className={`${tech.color} p-6 flex flex-col items-center text-white`}>
                 <div className="bg-white/20 p-3 rounded-xl mb-3">
                   {tech.icon}

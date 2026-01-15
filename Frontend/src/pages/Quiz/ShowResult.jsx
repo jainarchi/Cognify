@@ -33,7 +33,7 @@ const ShowResult = ({ correctCount, score, wrongCount , questions , userAnswers 
                 <div className="w-full md:w-[450px] p-8 bg-white border border-purple-100 rounded-[2.5rem] shadow-2xl text-center relative overflow-hidden">
 
                     <Target className="text-purple-600 mx-auto mb-4" size={50} />
-                    <h2 className="text-3xl font-black text-gray-800 mb-6">Quiz Finished!</h2>
+                    <h2 className="text-3xl font-black text-gray-800 mb-6">Assessment Finished!</h2>
 
                     <div className="mb-8">
                         <p className="text-6xl font-black text-purple-600 mb-2">{score}%</p>

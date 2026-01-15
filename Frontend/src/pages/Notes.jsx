@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Plus, Trash2, ArrowLeft, Brain, BookMarked } from "lucide-react";
+import { Trash2, ArrowLeft, Brain, BookMarked } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 const Notes = () => {

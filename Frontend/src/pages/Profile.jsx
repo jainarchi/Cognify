@@ -61,9 +61,9 @@ const Profile = () => {
       <div className="h-screen flex items-center justify-center text-center">
         <div>
           <Award size={48} className="mx-auto text-purple-600 mb-3" />
-          <h2 className="text-xl font-semibold">No quiz results yet</h2>
+          <h2 className="text-xl font-semibold">No Assessment results yet</h2>
           <p className="text-gray-500 mt-1">
-            Take a quiz to see your performance here.
+            Take a Assessment to see your performance here.
           </p>
           <h4 onClick={() => {navigate('/')}} className="text-purple-600 cursor-pointer my-2">Home</h4>
         </div>
@@ -73,23 +73,25 @@ const Profile = () => {
 
   return (
     <>
-      <Navbar />
+    <div className="sticky top-0 z-99">
+        <Navbar />
+    </div>
+     
 
       <div className="min-h-screen bg-gray-50 pb-20">
-        {/* HEADER SECTION */}
         <div className="bg-white border-b border-purple-100 mb-8">
           <div className="max-w-5xl mx-auto px-4 py-12 text-center">
             <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
               <Award size={40} className="text-purple-600" />
             </div>
-            <h1 className="text-3xl font-black text-gray-900 mb-2">My Quiz Journey</h1>
+            <h1 className="text-3xl font-black text-gray-900 mb-2">My Assessment Journey</h1>
             <p className="text-gray-500 font-medium italic">"Consistency is the key to mastery."</p>
             
-            {/* STATS SUMMARY BAR */}
+           
             <div className="flex justify-center gap-8 mt-8">
               <div>
                 <p className="text-2xl font-bold text-purple-700">{results.length}</p>
-                <p className="text-xs uppercase tracking-widest text-gray-400 font-bold">Quizzes Done</p>
+                <p className="text-xs uppercase tracking-widest text-gray-400 font-bold">Assessment Done</p>
               </div>
               <div className="w-px h-10 bg-gray-200"></div>
               <div>
@@ -102,7 +104,9 @@ const Profile = () => {
           </div>
         </div>
 
-        {/* RESULTS GRID */}
+
+
+
         <div className="max-w-5xl mx-auto p-4">
           <div className="flex items-center gap-2 mb-6">
             <Target className="text-purple-600" size={20} />
@@ -150,7 +154,9 @@ const Profile = () => {
                   </div>
                 </div>
 
-                {/* PERFORMANCE BADGE */}
+               
+
+
                 <div className="flex items-center justify-between">
                   <span
                     className={`px-4 py-1.5 rounded-full text-[11px] font-black uppercase tracking-widest
@@ -167,7 +173,7 @@ const Profile = () => {
                     {r.performance}
                   </span>
                   
-                  {/* PROGRESS MINI BAR */}
+                 
                   <div className="w-24 bg-gray-100 h-1.5 rounded-full overflow-hidden">
                     <div 
                       className="h-full bg-purple-500 rounded-full" 

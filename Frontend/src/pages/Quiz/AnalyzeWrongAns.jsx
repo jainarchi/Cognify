@@ -75,8 +75,10 @@ const AnalyzeWrongAns = () => {
   return (
    
      <>
+<div className="min-h-screen bg-gray-50 pb-10 font-sans">
 
-        <div className="max-w-4xl mx-auto flex justify-between items-center gap-6 p-2 bg-white border-b sticky top-0 z-50">
+   <div className=' bg-white sticky top-0 z-50'>
+        <div className="max-w-4xl mx-auto flex justify-between items-center gap-6 p-2">
           <button onClick={() => navigate(-1)} className="flex items-center gap-0.5 text-gray-500 hover:text-purple-600 font-bold transition-all">
             <ChevronLeft size={16} /> Back
           </button>
@@ -92,8 +94,9 @@ const AnalyzeWrongAns = () => {
             <Save size={18} /> Save
           </button>
         </div>
+        </div>
      
- <div className="min-h-screen bg-gray-50 pb-10 font-sans">
+ 
       <div className="max-w-4xl mx-auto p-4 mt-2 grid md:grid-cols-2 gap-6">
         
         <div className="space-y-4">
@@ -104,7 +107,7 @@ const AnalyzeWrongAns = () => {
               <h3 className="font-bold text-gray-800 mb-3 text-sm">{m.question}</h3>
               <div className="space-y-2">
                 <div className="text-xs p-2 bg-red-50 text-red-700 rounded-lg border border-red-100">
-                   <span className="font-black">Your Ans:</span> {m.userAns}
+                   <span className="font-black">Your Ans:</span> {m.userAns ? m.userAns : "Not Answered"}
                 </div>
                 <div className="text-xs p-2 bg-green-50 text-green-700 rounded-lg border border-green-100">
                    <span className="font-black">Correct Ans:</span> {m.correctAns}

@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -182,7 +182,7 @@ const ShowQuiz = () => {
     return (
       <div className="h-screen w-full flex flex-col justify-center items-center">
         <Loader2 className="animate-spin text-purple-600 mb-2" size={40} />
-        <p>Loading quiz...</p>
+        <p>Loading Assessment...</p>
       </div>
     );
 
@@ -207,7 +207,7 @@ const ShowQuiz = () => {
         className="w-full md:w-[600px] p-8 bg-white rounded-2xl shadow-xl border border-purple-100 relative overflow-auto 
   .no-scrollbar"
       >
-        {/* show time */}
+       
         <div
           className="absolute top-0 left-0 h-1 transition-all duration-1000 linear"
           style={{

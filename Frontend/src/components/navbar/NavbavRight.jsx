@@ -15,34 +15,39 @@ const NavbarRight = () => {
     navigate("/");
   };
 
+  const handleNotes = () =>{
+     navigate( isLoggedIn ? '/notes' : '/login')
+  }
+
 
 
   return (
     <div className="flex flex-col items-center gap-4 md:flex-row relative z-99">
-       <button
-            className="btn btn-mobile "
-            onClick={() => navigate('/')}
-          >
-            Home
-          </button>
-          <button
-            className="btn btn-mobile "
-            onClick={() => navigate('/notes')}
-          >
-            Notes
-          </button>
-          
+      <button
+        className="nav-btn  "
+        onClick={() => navigate('/')}
+      >
+        Home
+      </button>
+
+      <button
+        className="nav-btn  "
+        onClick={handleNotes}
+      >
+        Notes
+      </button>
+
 
       {!isLoggedIn ? (
         <>
           <button
-            className="btn btn-mobile"
+            className="nav-btn"
             onClick={() => navigate('/register')}
           >
             Register
           </button>
           <button
-            className="btn btn-mobile"
+            className="nav-btn"
             onClick={() => navigate('/login')}
           >
             Login
@@ -50,26 +55,16 @@ const NavbarRight = () => {
         </>
       ) : (
         <>
-          <div>
-            <button
-              className="btn btn-mobile md:hidden"
-              onClick={() => navigate('/profile')}
-            >
-              Profile
-            </button>
-
-            <button
-              className="hidden md:block w-10 h-10 rounded-full bg-white/30
-              flex items-center justify-center
-              text-white font-bold hover:bg-white/40 transition"
-              onClick={() => navigate('/profile')}
-            >
-              {user?.name?.[0]?.toUpperCase() || "U"}
-            </button>
-          </div>
 
           <button
-            className="btn btn-mobile flex gap-1"
+            className="nav-btn"
+            onClick={() => navigate('/profile')}
+          >
+            Profile
+          </button>
+
+          <button
+            className="nav-btn  flex items-center "
             onClick={handleLogout}
           >
             Logout <LogOut className="h-4" />
