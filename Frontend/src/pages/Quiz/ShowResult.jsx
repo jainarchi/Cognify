@@ -22,7 +22,7 @@ const ShowResult = ({ correctCount, score, wrongCount , questions , userAnswers 
                 })
             }
         })
-        navigate('/analyze-wrong-ans', { state:{wrong: filteredWrongAns}})
+        navigate('/analyze/wrong-ans', { state:{wrong: filteredWrongAns}})
     }
 
 

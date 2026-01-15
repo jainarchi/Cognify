@@ -6,6 +6,7 @@ import authRouter from './routers/authRouters.js'
 import resultRouter from "./routers/resultRoutes.js";
 import questionRouter from './routers/questionRouters.js'
 import noteRouter from './routers/noteRouter.js'
+import aiAnalyzeRouter from './routers/aiAnalyzeRoutes.js'
 
 dotenv.config();
 console.log("JWT_SECRET loaded:", !!process.env.JWT_SECRET);
@@ -36,6 +37,7 @@ app.use('/api/auth' , authRouter);
 app.use('/api/results' , resultRouter)
 app.use('/api/questions', questionRouter);
 app.use('/api/notes', noteRouter)
+app.use('/api/ai/analyze' , aiAnalyzeRouter)
 
 
 

@@ -8,41 +8,55 @@ const API_BASE = "http://localhost:4000";
 const AnalyzeWrongAns = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const mistakes = location.state?.wrong || [];
+  const wrongAnsArr = location.state?.wrong || [];
 
   const [aiSummary, setAiSummary] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
 
-  // 1. AI Summary Fetch karne ka logic
+
+
   useEffect(() => {
     const fetchAISummary = async () => {
-      if (mistakes.length === 0) return;
+      if (wrongAnsArr.length === 0) return;
+
+       const auth = JSON.parse(localStorage.getItem('auth')); 
+       const token = auth?.token ;
+       console.log(token);
       
       try {
         setIsGenerating(true);
-        const res = await axios.post(`${API_BASE}/api/ai/analyze`, { mistakes });
+        const res = await axios.post(
+          `${API_BASE}/api/ai/analyze/wrong-ans`, 
+          { wrongAnsArr },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`
+            }
+          }
+        );
+
+        console.log('agyaaa data')
         setAiSummary(res.data.summary);
+
       } catch (err) {
         console.error("AI Generation Error:", err);
         setAiSummary("Sorry, AI could not generate a summary at this time.");
+
       } finally {
         setIsGenerating(false);
       }
     };
 
-    // fetchAISummary();
-
-    console.log('fetch ai summary') 
+    fetchAISummary();
   }, []);
 
-  
 
-  // 2. AI Notes ko Save karne ka logic
+
   const handleSaveToNotes = async () => {
     try {
       const auth = JSON.parse(localStorage.getItem("auth"));
       await axios.post(`${API_BASE}/api/notes`, {
-        title: `AI Analysis: ${mistakes[0]?.tech || 'Quiz'}`,
+        title: `AI Analysis: ${wrongAnsArr[0]?.tech || 'Quiz'}`,
         content: aiSummary,
         category: "AI Generated"
       }, {
@@ -80,8 +94,8 @@ const AnalyzeWrongAns = () => {
         
         {/* LEFT SIDE: WRONG ANSWERS LIST */}
         <div className="space-y-4">
-          <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-2">Review Mistakes</h2>
-          {mistakes.map((m, idx) => (
+          <h2 className="text-sm font-black text-gray-400 uppercase tracking-widest mb-2">Review wrongAnsArr</h2>
+          {wrongAnsArr.map((m, idx) => (
             <div key={idx} className="bg-white p-5 rounded-3xl border border-red-100 shadow-sm relative overflow-hidden">
               <div className="absolute top-0 left-0 w-1.5 h-full bg-red-400"></div>
               <h3 className="font-bold text-gray-800 mb-3 text-sm">{m.question}</h3>

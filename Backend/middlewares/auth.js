@@ -6,7 +6,9 @@ const authMiddleware = async (req , res , next) => {
 //    console.log('enter in auth middleware')
     let token = req.headers.authorization?.split(" ")[1];
     if( ! token ){ 
+        console.log('not go to controller ')
         return res.status(401).json({message: "Not authorized, no token."})
+       
     }
         
     try{
