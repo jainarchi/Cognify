@@ -19,16 +19,18 @@ Cognif is a comprehensive, gamified learning management system designed to asses
 - Performance Profile: A dedicated dashboard showing quiz history, average scores, and performance badges (Excellent, Good, etc.).
 
 
-🛠️ Roadmap (Future Enhancements)
 🤖 Generative AI Integration
 - Personalized AI Tutor: Integration with Google Gemini API to analyze a user's wrong answers and generate custom study notes and "Weak Area" summaries.
 
+
+🛠️ Roadmap (Future Enhancements)
 🏆 Gamification 2.0
 - Streak System: Logic to track daily participation and award "Consistency Badges."
 -Global Leaderboard: Real-time ranking of users based on total points and accuracy.
 
-📈 Advanced Learning Loop
-Mistake Review Mode: A specialized feature allowing users to review there wrong ans, creating.
+
+
+
 
 💻 Tech Stack
 - Frontend: React.js, Tailwind CSS, Lucide Icons, Axios.
