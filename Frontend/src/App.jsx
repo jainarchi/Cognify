@@ -1,4 +1,5 @@
-import React from 'react'
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import {Route , Routes} from 'react-router-dom'
 import { AuthProvider } from "./context/AuthContext";
 
@@ -26,9 +27,11 @@ const App = () => {
 
         <Route path="/quiz/:tech/:level" element={<QuizPage />} />
         
-
+        
       </Routes>
-   </AuthProvider>
+    </AuthProvider>
+
+      <ToastContainer position="top-right" autoClose={2000} limit={1} />
     </>
   )
 }

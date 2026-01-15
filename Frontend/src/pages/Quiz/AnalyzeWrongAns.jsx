@@ -2,6 +2,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BrainCircuit, ChevronLeft, Save, Loader2, Sparkles } from 'lucide-react';
+import { toast } from "react-toastify";
+
+
 
 const API_BASE = "http://localhost:4000";
 
@@ -62,9 +65,10 @@ const AnalyzeWrongAns = () => {
       }, {
         headers: { Authorization: `Bearer ${auth?.token}` }
       });
-      alert("AI Summary saved to your Personal Notes!");
+      toast.success("AI Summary saved to your Personal Notes!");
     } catch (err) {
-      alert("Failed to save notes.");
+      toast.error("failed to save");
+      console.log(err);
     }
   };
 

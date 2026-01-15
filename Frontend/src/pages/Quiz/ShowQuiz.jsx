@@ -1,13 +1,11 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
+import { toast } from "react-toastify";
 
 import {
   CheckCircle,
   XCircle,
-  Target,
   Loader2,
   ArrowRight,
   Clock,
@@ -42,7 +40,7 @@ const ShowQuiz = () => {
   useEffect(() => {
     const handleViolation = () => {
       if (!showResults && !loading && questions.length > 0) {
-        toast.error("⚠️ Security Violation: Tab switch or Minimize detected!", {
+        toast.error("⚠️ Violation: Tab switch or Minimize detected!", {
           toastId: "violation-toast",
           position: "top-center",
           autoClose: 2000,
@@ -72,6 +70,10 @@ const ShowQuiz = () => {
     };
   }, [showResults, loading, questions.length]);
 
+
+
+
+
   useEffect(() => {
     const fetchQuestions = async () => {
       try {
@@ -91,6 +93,11 @@ const ShowQuiz = () => {
     };
     fetchQuestions();
   }, [tech, level]);
+
+
+
+
+
 
   useEffect(() => {
     if (!isAnswered && !showResults && !loading && questions.length > 0) {
@@ -195,7 +202,6 @@ const ShowQuiz = () => {
 
   return (
     <div className="h-screen w-full flex justify-center bg-gray-50 p-4">
-      <ToastContainer limit={1} />
 
       <div
         className="w-full md:w-[600px] p-8 bg-white rounded-2xl shadow-xl border border-purple-100 relative overflow-auto 

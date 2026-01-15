@@ -1,65 +1,55 @@
+import { GoogleGenerativeAI } from "@google/generative-ai";
+
 export const aiAnalyzeWrongAnswers = async (req, res) => {
   try {
     const { wrongAnsArr } = req.body;
 
     if (!wrongAnsArr || wrongAnsArr.length === 0) {
-      return res.status(400).json({ success: false, message: "No data provided" });
+      return res
+        .status(400)
+        .json({ success: false, message: "No data provided" });
     }
-
 
     const apiKey = process.env.GEMINI_API_KEY;
     if (!apiKey) {
       return res.status(500).json({ message: "API Key missing in .env" });
     }
 
+    const genAI = new GoogleGenerativeAI(apiKey);
+    const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
+
     const tech = wrongAnsArr[0]?.tech || "General Technology";
-    console.log("Processing AI request for tech:", tech);
+   
+    const promptText = `
+You are a concise ${tech} tutor. Analyze the quiz mistakes below and provide **one short, simple line** for each wrong answer explaining the concept or reason the answer is correct.
 
-    console.log("Gemini key loaded:", !!process.env.GEMINI_API_KEY);
+Rules:
+- Only give **one line per question**.
+- Do **not** include the user's answer.
+- Use **plain language**, avoid symbols like ||, &&, {}, [], etc.
+- Keep it **very short** and easy to read.
+- Use a numbered list or bullet points.
+- No greetings, motivation, or extra commentary.
 
-
- const url = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${apiKey}`;
+Quiz mistakes (JSON format):
+${JSON.stringify(wrongAnsArr, null, 2)}
+`;
 
    
-    const promptText = `You are a helpful ${tech} tutor. Analyze these quiz mistakes and give a concise summary: ${JSON.stringify(wrongAnsArr)}`;
-
-  
-
-    const response = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{ text: promptText }]
-        }]
-      })
-    });
-
-    const data = await response.json()
-
-
-    if (data.error) {
-      console.error("Google API Error:", data.error.message);
-      return res.status(data.error.code || 500).json({ 
-        success: false, 
-        message: data.error.message 
-      });
-    }
-
-
-    const aiSummary = data.candidates[0].content.parts[0].text;
+    const result = await model.generateContent(promptText);
+    const aiSummary = result.response.text();
     
+
     res.status(200).json({
       success: true,
-      summary: aiSummary
+      summary: aiSummary,
     });
-
   } catch (error) {
     console.error("DETAILED BACKEND ERROR:", error.message);
     res.status(500).json({
       success: false,
       message: "Internal Server Error",
-      error: error.message
+      error: error.message,
     });
   }
 };
