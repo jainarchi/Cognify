@@ -21,22 +21,21 @@ export const aiAnalyzeWrongAnswers = async (req, res) => {
     const tech = wrongAnsArr[0]?.tech || "General Technology";
    
     const promptText = `
-You are a friendly and concise ${tech} tutor.  
-Analyze the quiz mistakes below and explain each wrong answer.
+    You are a friendly and concise ${tech} tutor.  
+    Analyze the quiz mistakes below and explain each wrong answer.
 
-Output format rules (must follow exactly):
-- Start each section with: * **Question X**
-- Leave one blank line after the question heading.
-- Write **exactly two short lines** under each question.
-- Each line explains one clear concept.
-- No bullets, no symbols, no numbering for the lines.
-- Do not include the user's answer.
-- Use plain, simple language.
-- No greetings or extra text.
-
-
-Quiz mistakes (JSON format):
-${JSON.stringify(wrongAnsArr, null, 2)}
+  Output format rules (must follow exactly):
+  - Start each section with: * **Question X**
+  - Leave one blank line after the question heading.
+  - Write **exactly two short lines** under each question.
+  - Each line explains one clear concept.
+  - No bullets, no symbols, no numbering for the lines.
+  - Do not include the user's answer.
+  - Use plain, simple language.
+  - No greetings or extra text.
+  
+  Quiz mistakes (JSON format):
+  ${JSON.stringify(wrongAnsArr, null, 2)}
 `;
 
    
