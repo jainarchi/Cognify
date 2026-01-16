@@ -1,5 +1,5 @@
-Cognif – Full-Stack MERN Learning Platform
-Cognif is a comprehensive, gamified learning management system designed to assess and improve technical skills across 8+ modern technologies. Built with the MERN stack, it features a proctored environment, AI-driven feedback, and a logic-based rewards system.
+Cognif – Technical Assessment Platform
+Cognif is a comprehensive, technical assessment platform designed to give timed question assessment and improve technical skills across 8+ modern technologies. Built with the MERN stack, it features a proctored environment, AI-driven feedback, and a logic-based rewards system.
 
 
 🚀 Implemented Features
