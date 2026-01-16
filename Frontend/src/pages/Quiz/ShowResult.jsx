@@ -5,8 +5,6 @@ const ShowResult = ({ correctCount, score, wrongCount , questions , userAnswers 
     const navigate = useNavigate();
 
     const handleReviewClick = () =>{
-        console.log('analyze with ai page ...')
-
         let filteredWrongAns = [];
 
         questions.forEach((q , index ) =>{

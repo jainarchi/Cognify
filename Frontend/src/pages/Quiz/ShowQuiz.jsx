@@ -1,8 +1,11 @@
-import { useParams } from "react-router-dom";
+import { replace, useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { SHOW_QUIZ } from "../../utils/Path";
+import { useContext } from "react";
+import { AuthContext } from "../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 
 import {
@@ -17,7 +20,10 @@ import ShowResult from "./ShowResult";
 
 
 const ShowQuiz = () => {
+  const navigate = useNavigate();
   const { tech, level } = useParams();
+  const {isLoggedIn}  = useContext(AuthContext)
+
 
   const [questions, setQuestions] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -74,9 +80,12 @@ const ShowQuiz = () => {
 
 
 
-
-
   useEffect(() => {
+    if( ! isLoggedIn){
+       navigate('/register' , {replace : true})
+       return ;  
+    }
+
     const fetchQuestions = async () => {
       try {
         setLoading(true);
@@ -95,8 +104,6 @@ const ShowQuiz = () => {
     };
     fetchQuestions();
   }, [tech, level]);
-
-
 
 
 
@@ -181,13 +188,7 @@ const ShowQuiz = () => {
     }
   }, [showResults]);
 
-  if (loading)
-    return (
-      <div className="h-screen w-full flex flex-col justify-center items-center">
-        <Loader2 className="animate-spin text-purple-600 mb-2" size={40} />
-        <p>Loading Assessment...</p>
-      </div>
-    );
+  
 
   if (showResults)
     return (
@@ -201,6 +202,16 @@ const ShowQuiz = () => {
       />
     );
 
+
+  if (loading)
+    return (
+      <div className="h-screen w-full flex flex-col justify-center items-center">
+        <Loader2 className="animate-spin text-purple-600 mb-2" size={40} />
+        <p>Loading Assessment...</p>
+      </div>
+    );
+
+  
   const currentQ = questions[currentQuestion];
 
   return (

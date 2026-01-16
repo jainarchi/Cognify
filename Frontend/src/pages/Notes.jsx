@@ -69,7 +69,7 @@ const Notes = () => {
     return (
        <>
 
-            <div className="mx-auto p-3 md:px-10 flex justify-between items-center nav-bg w-full">
+            <div className="mx-auto p-3 md:px-10 flex justify-between items-center nav-bg w-full sticky top-0 z-99 shadow-xl">
                 <div className="flex items-center gap-1 md:gap-2">
                     <button onClick={() => navigate(-1)} className="text-slate-800 hover:text-slate-900">
                         <ChevronLeft size={20} className="text-white" />
@@ -98,7 +98,7 @@ const Notes = () => {
                         </p>
                     </div>
                 ) : (
-                    <div className="columns-1 md:columns-2 lg:columns-3 gap-6 space-y-6">
+                    <div className="columns-1 md:columns-2 gap-6 space-y-6">
                         {notes.map((note) => (
                             <div
                                 key={note._id}

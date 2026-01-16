@@ -5,13 +5,15 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar/Navbar";
 import Footer from "../components/footer/Footer";
 import { SHOW_QUIZ } from "../utils/Path";
-
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 
 const Profile = () => {
   const navigate = useNavigate();
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
+  const {user}  = useContext(AuthContext)
 
 
   const auth = JSON.parse(localStorage.getItem("auth"));
@@ -83,9 +85,10 @@ const Profile = () => {
       <div className="min-h-screen bg-gray-50 pb-20">
         <div className="bg-white border-b border-purple-100 mb-8">
           <div className="max-w-5xl mx-auto px-4 py-12 text-center">
-            <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-4 shadow-inner">
+            <div className="w-20 h-20 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-2 shadow-inner">
               <Award size={40} className="text-purple-600" />
             </div>
+            <h3 className="text-gray-600 text-lg font-semibold">{user.name}</h3>
             <h1 className="text-3xl font-black text-gray-900 mb-2">My Assessment Journey</h1>
             <p className="text-gray-500 font-medium italic">"Consistency is the key to mastery."</p>
             
