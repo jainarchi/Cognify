@@ -3,8 +3,10 @@ import axios from "axios";
 import { Award, Target, CheckCircle, XCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/navbar/Navbar";
+import Footer from "../components/footer/Footer";
+import { SHOW_QUIZ } from "../utils/Path";
 
-const API_BASE = "http://localhost:4000";
+
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -23,7 +25,7 @@ const Profile = () => {
       }
 
       try {
-        const res = await axios.get(`${API_BASE}/api/results`, {
+        const res = await axios.get(`${SHOW_QUIZ.RESULT}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -186,6 +188,8 @@ const Profile = () => {
           </div>
         </div>
       </div>
+
+      <Footer />
     </>
   );
 };

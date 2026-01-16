@@ -19,7 +19,7 @@
   }
 
   .nav-bg {
-    @apply bg-gradient-to-r from-indigo-400 via-purple-300 to-blue-300
+    @apply bg-gradient-to-r from-indigo-500 via-purple-400 to-blue-400
   }
 
   .icon {

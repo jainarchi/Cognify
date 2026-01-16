@@ -3,10 +3,10 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { BrainCircuit, ChevronLeft, Save, Loader2, Sparkles } from 'lucide-react';
 import { toast } from "react-toastify";
+import { AI_ANALYZE, NOTE_PATHS } from '../../utils/Path';
 
 
 
-const API_BASE = "http://localhost:4000";
 
 const AnalyzeWrongAns = () => {
   const location = useLocation();
@@ -29,7 +29,7 @@ const AnalyzeWrongAns = () => {
       try {
         setIsGenerating(true);
         const res = await axios.post(
-          `${API_BASE}/api/ai/analyze/wrongans`, 
+          `${AI_ANALYZE.WRONG_ANS}`, 
           { wrongAnsArr },
           {
             headers: {
@@ -58,7 +58,7 @@ const AnalyzeWrongAns = () => {
   const handleSaveToNotes = async () => {
     try {
       const auth = JSON.parse(localStorage.getItem("auth"));
-      await axios.post(`${API_BASE}/api/notes`, {
+      await axios.post(`${NOTE_PATHS.NOTES}`, {
         title: `AI Analysis: ${wrongAnsArr[0]?.tech || 'Quiz'}`,
         content: aiSummary,
         category: "AI Generated"
@@ -72,6 +72,8 @@ const AnalyzeWrongAns = () => {
     }
   };
 
+
+  
   return (
    
      <>

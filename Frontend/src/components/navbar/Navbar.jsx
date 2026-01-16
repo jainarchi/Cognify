@@ -9,7 +9,7 @@ const Navbar = () => {
 
   return (
     <nav className="w-full px-4 py-2 flex items-center justify-between md:px-20 lg:px-34
-                    nav-bg shadow-xl h-[8vh] md:h-[10vh] ">
+                    nav-bg shadow-xl h-[8vh] md:h-[10vh] sticky top-0 z-99">
       
       <h1 className="text-2xl font-bold text-white tracking-wide ">
         SkillSphere

@@ -30,7 +30,7 @@ const QuizCategory = () => {
       
         <div className="text-center mb-12">
           <h1 className="text-4xl font-extrabold text-gray-900 mb-2">Choose Your Challenge</h1>
-          <p className="text-gray-600">Select a technology and difficulty to start the quiz</p>
+          <p className="text-gray-600">Select a technology and difficulty to start the Assessment.</p>
         </div>
 
        

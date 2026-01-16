@@ -1,4 +1,3 @@
-import React from "react";
 import { LogOut } from 'lucide-react';
 import { useNavigate } from "react-router-dom";
 import { useContext } from "react";
@@ -8,7 +7,7 @@ import { AuthContext } from "../../context/AuthContext";
 
 const NavbarRight = () => {
   const navigate = useNavigate();
-  const { isLoggedIn, user, logout } = useContext(AuthContext);
+  const { isLoggedIn, logout } = useContext(AuthContext);
 
   const handleLogout = () => {
     logout();
@@ -22,7 +21,7 @@ const NavbarRight = () => {
 
 
   return (
-    <div className="flex flex-col items-center gap-4 md:flex-row relative z-99">
+    <div className="flex flex-col items-center gap-4 md:flex-row">
       <button
         className="nav-btn  "
         onClick={() => navigate('/')}

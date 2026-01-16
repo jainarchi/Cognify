@@ -2,8 +2,8 @@ import { Award, Star, Zap } from "lucide-react";
 
 const MainPageView = () => {
   return (
-    <div className="relative overflow-hidden px-4 py-10 md:py-16">
-      <div className="max-w-4xl mx-auto bg-white/60 backdrop-blur-xl border border-white/80 rounded-[2rem] p-8 md:p-12 shadow-2xl shadow-purple-500/5 text-center">
+    <div className="relative  overflow-hidden px-4 py-10 md:py-16">
+      <div className="max-w-4xl mx-auto bg-white/60 backdrop-blur-xl border border-white/80 rounded-[2rem] p-8 md:p-12 shadow-2xl shadow-purple-500/5 text-center relative z-10">
         <div className="flex justify-center mb-6">
           <div className="w-20 h-20 bg-gradient-to-br from-purple-600 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-purple-200 rotate-3">
             <Award size={40} className="text-white" />

@@ -21,15 +21,19 @@ export const aiAnalyzeWrongAnswers = async (req, res) => {
     const tech = wrongAnsArr[0]?.tech || "General Technology";
    
     const promptText = `
-You are a concise ${tech} tutor. Analyze the quiz mistakes below and provide **one short, simple line** for each wrong answer explaining the concept or reason the answer is correct.
+You are a friendly and concise ${tech} tutor.  
+Analyze the quiz mistakes below and explain each wrong answer.
 
-Rules:
-- Only give **one line per question**.
-- Do **not** include the user's answer.
-- Use **plain language**, avoid symbols like ||, &&, {}, [], etc.
-- Keep it **very short** and easy to read.
-- Use a numbered list or bullet points.
-- No greetings, motivation, or extra commentary.
+Output format rules (must follow exactly):
+- Start each section with: * **Question X**
+- Leave one blank line after the question heading.
+- Write **exactly two short lines** under each question.
+- Each line explains one clear concept.
+- No bullets, no symbols, no numbering for the lines.
+- Do not include the user's answer.
+- Use plain, simple language.
+- No greetings or extra text.
+
 
 Quiz mistakes (JSON format):
 ${JSON.stringify(wrongAnsArr, null, 2)}

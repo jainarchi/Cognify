@@ -2,6 +2,8 @@ import { useParams } from "react-router-dom";
 import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { SHOW_QUIZ } from "../../utils/Path";
+
 
 import {
   CheckCircle,
@@ -12,7 +14,7 @@ import {
 } from "lucide-react";
 import ShowResult from "./ShowResult";
 
-const API_BASE = "http://localhost:4000";
+
 
 const ShowQuiz = () => {
   const { tech, level } = useParams();
@@ -78,7 +80,7 @@ const ShowQuiz = () => {
     const fetchQuestions = async () => {
       try {
         setLoading(true);
-        const res = await axios.get(`${API_BASE}/api/questions`, {
+        const res = await axios.get(`${SHOW_QUIZ.QUESTION}`, {
           params: { technology: tech, level, limit: 10 },
         });
         if (res.data.success) {
@@ -93,7 +95,6 @@ const ShowQuiz = () => {
     };
     fetchQuestions();
   }, [tech, level]);
-
 
 
 
@@ -114,6 +115,8 @@ const ShowQuiz = () => {
     return () => clearInterval(timerRef.current);
   }, [currentQuestion, isAnswered, loading, showResults]);
 
+
+  
   const handleTimeOut = () => {
     clearInterval(timerRef.current);
     setUserAnswers((prev) => ({ ...prev, [currentQuestion]: -1 }));
@@ -156,7 +159,7 @@ const ShowQuiz = () => {
         try {
           submittedRef.current = true;
           await axios.post(
-            `${API_BASE}/api/results`,
+            `${SHOW_QUIZ.RESULT}`,
             {
               title: `${tech.toUpperCase()} - ${level} Quiz`,
               technology: tech,

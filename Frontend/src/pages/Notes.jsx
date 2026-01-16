@@ -1,16 +1,19 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { Trash2, ArrowLeft, Brain, BookMarked } from "lucide-react";
+import { Trash2, ChevronLeft, Brain, BookMarked, Plus } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { NOTE_PATHS } from "../utils/Path";
+import { toast } from "react-toastify"; 
+
 
 const Notes = () => {
     const [notes, setNotes] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
     const [form, setForm] = useState({ title: "", content: "", tech: "" });
+   
 
     const navigate = useNavigate();
-    const API_BASE = "http://localhost:4000";
 
     useEffect(() => {
         fetchNotes();
@@ -19,7 +22,7 @@ const Notes = () => {
     const fetchNotes = async () => {
         try {
             const auth = JSON.parse(localStorage.getItem("auth"));
-            const res = await axios.get(`${API_BASE}/api/notes`, {
+            const res = await axios.get(`${NOTE_PATHS.NOTES}`, {
                 headers: { Authorization: `Bearer ${auth?.token}` }
             });
             setNotes(res.data.notes);
@@ -30,11 +33,13 @@ const Notes = () => {
         }
     };
 
+
+
     const saveNote = async (e) => {
         e.preventDefault();
         try {
             const auth = JSON.parse(localStorage.getItem("auth"));
-            const res = await axios.post(`${API_BASE}/api/notes`,
+            const res = await axios.post(`${NOTE_PATHS.NOTES}`,
                 { ...form, isAI: false },
                 { headers: { Authorization: `Bearer ${auth?.token}` } }
             );
@@ -43,7 +48,7 @@ const Notes = () => {
             setForm({ title: "", content: "", tech: "" });
         } catch (err) {
             console.error("Server Error:", err.response?.data);
-            alert("Error saving note: " + (err.response?.data?.message || "Internal Server Error"));
+            toast.error("Error saving note: " + (err.response?.data?.message || "Internal Server Error"));
         }
     };
 
@@ -51,12 +56,13 @@ const Notes = () => {
         if (!window.confirm("Delete this note?")) return;
         try {
             const auth = JSON.parse(localStorage.getItem("auth"));
-            await axios.delete(`${API_BASE}/api/notes/${id}`, {
+            await axios.delete(`${NOTE_PATHS.NOTES}/${id}`, {
                 headers: { Authorization: `Bearer ${auth?.token}` }
             });
+            
             setNotes(notes.filter(n => n._id !== id));
         } catch (err) {
-            alert("Error deleting", err);
+            toast.error("Error deleting", err);
         }
     }
 
@@ -64,9 +70,9 @@ const Notes = () => {
        <>
 
             <div className="mx-auto p-3 md:px-10 flex justify-between items-center nav-bg w-full">
-                <div className="flex items-center gap-1 md:gap-4">
+                <div className="flex items-center gap-1 md:gap-2">
                     <button onClick={() => navigate(-1)} className="text-slate-800 hover:text-slate-900">
-                        <ArrowLeft size={20} />
+                        <ChevronLeft size={20} className="text-white" />
                     </button>
                     <h1 className="text-xl md:text-2xl font-bold text-white">Personal Notes</h1>
                 </div>
@@ -74,13 +80,13 @@ const Notes = () => {
                     onClick={() => setShowModal(true)}
                     className="btn text-sm md:text-[16px]"
                 >
-                    Add Note
+                    Add <Plus size={20}/>
                 </button>
             </div>
 
             <div className="min-h-screen bg-gray-100 text-slate-900 font-sans p-4">
 
-            <main className="max-w-6xl mx-auto px-6 pb-20">
+            <main className="max-w-6xl mx-auto px-0 md:px-6  pb-20">
                 {loading ? (
                     <p className="text-slate-400">Loading notes...</p>
                 ) : notes.length === 0 ? (
@@ -102,7 +108,7 @@ const Notes = () => {
                                     <div className="flex flex-wrap gap-2">
                                         {note.isAI && (
                                             <span className="flex items-center gap-1 text-[10px] font-bold text-indigo-600 bg-indigo-50 px-2 py-0.5 rounded uppercase">
-                                                <Brain size={10} /> AI Summary
+                                                <Brain size={10} />AI Summary
                                             </span>
                                         )}
                                         <span className="text-[10px] font-bold text-slate-400 bg-slate-100 px-2 py-0.5 rounded uppercase">
