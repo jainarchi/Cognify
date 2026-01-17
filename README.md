@@ -25,14 +25,6 @@ Cognif is a comprehensive, technical assessment platform designed to give timed 
 - Personalized AI Tutor: Integration with Google Gemini API to analyze a user's wrong answers and generate custom study notes and "Weak Area" summaries.
 
 
-🛠️ Roadmap (Future Enhancements)
-🏆 Gamification 2.0
-- Streak System: Logic to track daily participation and award "Consistency Badges."
-- Global Leaderboard: Real-time ranking of users based on total points and accuracy.
-
-
-
-
 
 💻 Tech Stack
 - Frontend: React.js, Tailwind CSS, Lucide Icons, Axios.
