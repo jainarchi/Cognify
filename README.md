@@ -1,7 +1,7 @@
-Cognif | Technical Assessemnt Platform
-Cognif is a comprehensive, Technical Assessment platform designed to assess timed questions assessment and improve technical skills across 8+ modern technologies. Built with the MERN stack, it features a proctored environment, AI-driven feedback, and a logic-based rewards system.
-Cognif – Technical Assessment Platform
-Cognif is a comprehensive, technical assessment platform designed to give timed question assessment and improve technical skills across 8+ modern technologies. Built with the MERN stack, it features a proctored environment, AI-driven feedback, and a logic-based rewards system.
+SkillSphere | Technical Assessemnt Platform
+SkillSphere is a comprehensive, Technical Assessment platform designed to assess timed questions assessment and improve technical skills across 8+ modern technologies. Built with the MERN stack, it features a proctored environment, AI-driven feedback, and a logic-based rewards system.
+
+SkillSphere is a comprehensive, technical assessment platform designed to give timed question assessment and improve technical skills across 8+ modern technologies. Built with the MERN stack, it features a proctored environment, AI-driven feedback, and a logic-based rewards system.
 
 
 🚀 Implemented Features
